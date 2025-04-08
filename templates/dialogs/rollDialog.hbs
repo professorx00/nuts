@@ -1,0 +1,18 @@
+<form class="{{cssClass}} {{actor.type}} flexcol" autocomplete="off">
+    <h1>{{newTitle}}</h1>
+     <div class="resources flexrow">
+        {{#times challengeDice}}
+            <img class="challengeDice" src="systems/nuts/assets/acorn_challenge.png" title="Challenge Dice" />
+        {{/times}}
+        {{#times dice}}
+            <img class="giveBackChallengeDice" src="systems/nuts/assets/acorn_empty.png" title="Challenge Dice" />
+        {{/times}}
+    </div>
+    <div class="flexcol">
+        <span>You choose this man challenge dice {{dice}}</span>
+        <span>Does the roll have a Detriment?</span>
+        <input class="hasDetriment" type="checkbox" name="detriment" {{checked detriment}}>
+        <span></span>
+        <a class="rollBtn">Roll</a>
+    </div>
+</form>

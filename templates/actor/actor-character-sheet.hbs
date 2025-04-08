@@ -1,0 +1,73 @@
+<form class="{{cssClass}} {{actor.type}} flexcol" autocomplete="off">
+
+  {{!-- Sheet Header --}}
+  <header class="sheet-header">
+    <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100"/>
+    <div class="header-fields">
+      <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
+      {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
+      use both the "grid" and "grid-Ncol" class where "N" can be any number
+      from 1 to 12 and will create that number of columns.  --}}
+      <div class="resources flexrow">
+        <label for="system.health.value" class="resource-label">HP</label>
+      </div>
+      <div class="resources flexrow">
+        {{#times system.health.value}}
+            <img class="health" src="systems/nuts/assets/acorn_health.png" title="health" />
+        {{/times}}
+        <img class="moreHealth" src="systems/nuts/assets/acorn_empty_plus.png" title="empty health" />
+      </div>
+       <div class="resources flexrow">
+        <label for="system.challengeDice.value" class="resource-label">Challenge Dice</label>
+      </div>
+      <div class="resources flexrow">
+        {{#times system.challengeDice.value}}
+            <img class="challengeDice" src="systems/nuts/assets/acorn_challenge.png" title="Challenge Dice" />
+        {{/times}}
+        <img class="moreChallengeDice" src="systems/nuts/assets/acorn_empty_plus.png" title="empty Challenge Dice" />
+      </div>
+    </div>
+  </header>
+  <div class="rollButtons">
+      <a class="rollBtn" data-roll-type="cd" data-title="Challenge Roll" data-challenge-dice="{{actor.challengeDice.value}}">Challenge Roll</a>
+      <a class="rollBtn" data-roll-type="def" data-title="Defense Roll" data-challenge-dice="{{actor.challengeDice.value}}">Defense Roll</a>
+  </div>
+  {{!-- Sheet Tab Navigation --}}
+  <nav class="sheet-tabs tabs" data-group="primary">
+    {{!-- Default tab is specified in actor-sheet.mjs --}}
+    <a class="item" data-tab="shells">Shells</a>
+    <a class="item" data-tab="nut">NUT</a>
+    <a class="item" data-tab="items">Items</a>
+  </nav>
+
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+    {{!-- Owned shells Tab --}}
+    <div class="tab shells" data-group="primary" data-tab="shells">
+          {{!-- This is a Handlebars partial. They're stored in the `/parts` folder next to this sheet, and defined in module/helpers/templates.mjs --}}
+          {{> "systems/nuts/templates/actor/parts/actor-shells.hbs"}}
+    </div>
+
+    {{!-- Biography Tab --}}
+    <div class="tab biography" data-group="primary" data-tab="nut">
+      {{!-- Editors must receive enriched text data from getData to properly handle rolls --}}
+        <h1>Nature</h1>
+        {{editor enrichedNature target="system.nature" engine="prosemirror" button=true editable=editable}}
+    </div>
+    <div class="tab biography" data-group="primary" data-tab="nut">
+      {{!-- Editors must receive enriched text data from getData to properly handle rolls --}}
+        <h1>Utility</h1>
+        {{editor enrichedUtility target="system.utility" engine="prosemirror" button=true editable=editable}}
+    </div>
+    <div class="tab biography" data-group="primary" data-tab="nut">
+      {{!-- Editors must receive enriched text data from getData to properly handle rolls --}}
+        <h1>Tale</h1>
+        {{editor enrichedTale target="system.tale" engine="prosemirror" button=true editable=editable}}
+    </div>
+
+    {{!-- Owned Items Tab --}}
+    <div class="tab items" data-group="primary" data-tab="items">
+       {{> "systems/nuts/templates/actor/parts/actor-items.hbs"}}
+    </div>
+  </section>
+</form>
