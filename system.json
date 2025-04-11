@@ -4,12 +4,8 @@
   "description": "The NUTS system for FoundryVTT!",
   "authors": [
     {
-      "name": "Asacolips",
-      "discord": "asacolips"
-    },
-    {
-      "name": "Lee Talman",
-      "discord": ".pizzaWizard"
+      "name": "David Ward",
+      "discord": "Grimwood_Games"
     }
   ],
   "url": "Replace this with a link to your public repository",
@@ -41,8 +37,8 @@
   "packs": [],
   "packFolders": [],
   "socket": false,
-  "manifest": "Replace this with a link to the /latest release system.json so people can receive updates after they've installed the system",
-  "download": "This must link to a .zip file of the current version",
+  "manifest": "https://github.com/professorx00/nuts/releases/download/alpha2/system.json",
+  "download": "https://github.com/professorx00/nuts/releases/download/alpha2/nuts.zip",
   "background": "systems/nuts/assets/anvil-impact.png",
   "gridDistance": 5,
   "gridUnits": "ft",

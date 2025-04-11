@@ -1,4 +1,4 @@
-<ol class='items-list'>
+{{!-- <ol class='items-list'>
   <li class='item flexrow items-header'>
     <div class='item-name'>{{localize 'Name'}}</div>
     <div class="item-prop">Level</div>
@@ -51,4 +51,54 @@
       </div>
     </li>
   {{/each}}
+</ol> --}}
+<div class="flexrow">
+<div class="aside">
+<ol class='items-list'>
+  <li class='item flexrow items-header'>
+    <div class='item-name'>{{localize 'Name'}}</div>
+    <div class="item-prop">Level</div>
+  </li>
+   <li class='item flexrow' data-item-id='{{item._id}}'>
+      <div class='item-name'>{{localize 'NUTS.Shells.hardHitting'}}</div>
+        <div class="item-prop">
+          <select name="hardHitting" data-shell="hardHitting" class="shellSelect">{{selectOptions system.shellLevels selected=system.hardHitting}}</select>
+        </div>
+   </li>
 </ol>
+</div>
+<div>
+    <div>
+     <h1>Nature</h1>
+      {{editor enrichedNature target="system.nature" engine="prosemirror" button=true editable=editable}}
+    </div>
+</div>
+</div>
+
+<div>
+{{localize 'NUTS.Shells.defensive'}}:<select name="defensive" data-shell="defensive" class="shellSelect">{{selectOptions system.shellLevels selected=system.defensive}}</select>
+</div>
+<div>
+{{localize 'NUTS.Shells.comboMaker'}}:<select name="comboMaker" data-shell="comboMaker" class="shellSelect">{{selectOptions system.shellLevels selected=system.comboMaker}}</select>
+</div>
+<div>
+{{localize 'NUTS.Shells.surge'}}:<select name="surge" data-shell="surge" class="shellSelect">{{selectOptions system.shellLevels selected=system.surge}}</select>
+</div>
+<div>
+{{localize 'NUTS.Shells.protection'}}:<select name="protection" data-shell="protection" class="shellSelect">{{selectOptions system.shellLevels selected=system.protection}}</select>
+</div>
+<div>
+{{localize 'NUTS.Shells.itemEater'}}:<select name="itemEater" data-shell="itemEater" class="shellSelect">{{selectOptions system.shellLevels selected=system.itemEater}}</select>
+</div>
+<div>
+{{localize 'NUTS.Shells.crafter'}}:<select name="crafter" data-shell="crafter" class="shellSelect">{{selectOptions system.shellLevels selected=system.crafter}}</select>
+</div>
+<div>
+{{localize 'NUTS.Shells.durability'}}:<select name="durability" data-shell="durability" class="shellSelect">{{selectOptions system.shellLevels selected=system.durability}}</select>
+</div>
+<div>
+{{localize 'NUTS.Shells.endurance'}}:<select name="endurance" data-shell="endurance" class="shellSelect">{{selectOptions system.shellLevels selected=system.endurance}}</select>
+</div>
+<div>
+{{localize 'NUTS.Shells.lucky'}}:<select name="lucky" data-shell="lucky" class="shellSelect">{{selectOptions system.shellLevels selected=system.lucky}}</select>
+</div>

@@ -13,6 +13,73 @@ export default class nutsCharacter extends nutsActorBase {
       }),
     });
 
+    schema.shellLevels = new fields.SchemaField({
+      0: new fields.StringField({ initial: "Locked" }),
+      1: new fields.NumberField({ ...requiredInteger, initial: 1 }),
+      2: new fields.NumberField({ ...requiredInteger, initial: 2 }),
+      3: new fields.NumberField({ ...requiredInteger, initial: 3 }),
+      4: new fields.NumberField({ ...requiredInteger, initial: 4 }),
+      5: new fields.NumberField({ ...requiredInteger, initial: 5 }),
+      6: new fields.NumberField({ ...requiredInteger, initial: 6 }),
+    });
+
+    schema.targets = new fields.SchemaField({
+      1: new fields.NumberField({ ...requiredInteger, initial: 1 }),
+      2: new fields.NumberField({ ...requiredInteger, initial: 2 }),
+      3: new fields.NumberField({ ...requiredInteger, initial: 3 }),
+      4: new fields.NumberField({ ...requiredInteger, initial: 4 }),
+      5: new fields.NumberField({ ...requiredInteger, initial: 5 }),
+      6: new fields.NumberField({ ...requiredInteger, initial: 6 }),
+      7: new fields.NumberField({ ...requiredInteger, initial: 7 }),
+      8: new fields.NumberField({ ...requiredInteger, initial: 8 }),
+      9: new fields.NumberField({ ...requiredInteger, initial: 9 }),
+      10: new fields.NumberField({ ...requiredInteger, initial: 10 }),
+      11: new fields.NumberField({ ...requiredInteger, initial: 11 }),
+      12: new fields.NumberField({ ...requiredInteger, initial: 12 }),
+    });
+
+    schema.target = new fields.NumberField({ ...requiredInteger, initial: 6 });
+
+    schema.hardHitting = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0,
+    });
+    schema.defensive = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0,
+    });
+    schema.comboMaker = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0,
+    });
+    schema.surge = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0,
+    });
+    schema.protection = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0,
+    });
+    schema.itemEater = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0,
+    });
+    schema.crafter = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0,
+    });
+    schema.durability = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0,
+    });
+    schema.endurance = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0,
+    });
+    schema.lucky = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0,
+    });    
     // Iterate over ability names and create a new SchemaField for each.
     schema.abilities = new fields.SchemaField(Object.keys(CONFIG.NUTS.abilities).reduce((obj, ability) => {
       obj[ability] = new fields.SchemaField({

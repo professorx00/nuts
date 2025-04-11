@@ -66,19 +66,58 @@ export class nutsActor extends Actor {
     return result;
   }
 
-  async roll(dice, detriment) {
-    const speaker = ChatMessage.getSpeaker({ actor: this });
-    const rollMode = game.settings.get("core", "rollMode");
-    let formula = dice + 1 + "d12kh";
-    if(detriment){
-      formula = dice + 1 + "d12kl";
-    }
+  async roll(dice, target) {
+    let newDice = dice + 1;
+    console.log("target", target);
+    let formula = newDice + "d12";
     const roll = new Roll(formula, this);
-    roll.toMessage({
-      speaker: speaker,
-      rollMode: rollMode,
-      flavor: "Challenge Roll",
-    });
-    return roll;
+    let dices = roll.dice[0].results;
+    const rollData = {
+      rollHTML: await roll.render(),
+      roll: roll._total,
+      formula: formula,
+      dices: dices,
+      target: target,
+    };
+    console.log("rollData", rollData);
+    let cardContent = await renderTemplate(
+      "systems/nuts/templates/chat/challengeRoll.hbs",
+      rollData
+    );
+    const chatData = {
+      user: game.user.id,
+      type: CONST.CHAT_MESSAGE_TYPES.OTHER,
+      content: cardContent,
+      speaker: ChatMessage.getSpeaker({ actor: this }),
+      flags: { "core.canPopout": true },
+    };
+    ChatMessage.applyRollMode(chatData, game.settings.get("core", "rollMode"));
+    await game.dice3d.showForRoll(roll, game.user, true);
+    await ChatMessage.create(chatData);
+  }
+  async defensiveRoll(dice, level, gameType) {
+    console.log("defensive Roll");
+    console.log(level);
+    this.roll(dice);
+  }
+
+  async hardhittingRoll(dice, level, gameType) {
+    let newLevel = "trained";
+    if (gameType == "b") {
+      if (level == 2) {
+        newLevel = "experienced";
+      } else if (level > 2) {
+        newLevel = "mastered";
+      }
+    }
+    if (gameType == "c") {
+      if (level >= 3 && level < 6) {
+        newLevel = "experienced";
+      } else if (level >= 6) {
+        newLevel = "mastered";
+      }
+    }
+    console.log("level ", newLevel);
+    this.roll(dice);
   }
 }

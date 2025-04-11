@@ -1,0 +1,27 @@
+<div class="target">Target: {{target}}</div>
+<div class="diceTray">
+    {{#each dices}}
+        {{#if (above12 this.result)}}
+        <div class="above12">
+            <img src="systems/nuts/assets/above_low.png" alt="Snow" style="width:100%;">
+            <div class="centered">{{this.result}}</div>
+        </div>
+        {{/if}}
+        {{#if (below1 this.result)}}
+        <div class="above12">
+            <img src="systems/nuts/assets/failure_low.png" alt="Snow" style="width:100%;">
+            <div class="centered">{{this.result}}</div>
+        </div>
+        {{/if}}
+        {{#if (everythingElse this.result)}}
+        <div class="above12">
+            <img src="systems/nuts/assets/normal_low.png" alt="Snow" style="width:100%;">
+             {{#if (overTarget ../target this.result)}}
+                <div class="centered green">{{this.result}}</div>
+            {{else}}
+                <div class="centered red">{{this.result}}</div>
+            {{/if}}
+        </div>
+        {{/if}}
+    {{/each}}
+</div>

@@ -12,8 +12,8 @@ export class nutsActorSheet extends ActorSheet {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["nuts", "sheet", "actor"],
-      width: 600,
-      height: 600,
+      width: 700,
+      height: 700,
       tabs: [
         {
           navSelector: ".sheet-tabs",
@@ -99,7 +99,7 @@ export class nutsActorSheet extends ActorSheet {
         // Data to fill in for inline rolls
         rollData: this.actor.getRollData(),
         // Relative UUID resolution
-        relativeTo: this.actor,
+        relativeTo: this.actor,      
       }
     );
 
@@ -142,7 +142,7 @@ export class nutsActorSheet extends ActorSheet {
   _prepareItems(context) {
     // Initialize containers.
     const gear = [];
-    const shells = [];
+
     const spells = {
       0: [],
       1: [],
@@ -163,10 +163,6 @@ export class nutsActorSheet extends ActorSheet {
       if (i.type === "item") {
         gear.push(i);
       }
-      // Append to shells.
-      else if (i.type === "shell") {
-        shells.push(i);
-      }
       // Append to spells.
       else if (i.type === "spell") {
         if (i.system.spellLevel != undefined) {
@@ -177,7 +173,6 @@ export class nutsActorSheet extends ActorSheet {
 
     // Assign and return
     context.gear = gear;
-    context.shells = shells;
     context.spells = spells;
   }
 
@@ -209,6 +204,7 @@ export class nutsActorSheet extends ActorSheet {
     html.on("click", ".moreChallengeDice", this._AddCD.bind(this));
     html.on("click", ".challengeDice", this._RemoveCD.bind(this));
     html.on("click", ".rollBtn", this._onRoll.bind(this));
+     html.on("click", ".shellSelect", this._setShellLevels.bind(this));
 
     // Delete Inventory Item
     html.on("click", ".item-delete", (ev) => {
@@ -278,18 +274,17 @@ export class nutsActorSheet extends ActorSheet {
     event.preventDefault();
     const element = event.currentTarget;
     const dataset = element.dataset;
-    // Handle item rolls.
-    if (dataset.rollType) {
-      if (dataset.rollType == "item") {
-        const itemId = element.closest(".item").dataset.itemId;
-        const item = this.actor.items.get(itemId);
-        if (item) return item.roll();
-      }
-    }
-    if (dataset.rollType == "cd" || dataset.rollType == "def") {
-      const challengeDice = this.actor.system.challengeDice.value;
-      this._getBoonDialog(challengeDice, dataset.title);
-    }
+    // // Handle item rolls.
+    // if (dataset.rollType) {
+    //   if (dataset.rollType == "item") {
+    //     const itemId = element.closest(".item").dataset.itemId;
+    //     const item = this.actor.items.get(itemId);
+    //     if (item) return item.roll();
+    //   }
+    // }
+    const challengeDice = this.actor.system.challengeDice.value;
+    this._getBoonDialog(challengeDice, dataset.title);
+
   }
 
   /**
@@ -317,11 +312,14 @@ export class nutsActorSheet extends ActorSheet {
   }
 
   async _getBoonDialog(data, title) {
-     const rollDialog = new game.nuts.nutsRollDialog(
-        this.actor,
-        data,
-        title
-      );
-      rollDialog.render(true);
+    const rollDialog = new game.nuts.nutsRollDialog(this.actor, data, title,this.actor.system.targets);
+    rollDialog.render(true);
+  }
+  _setShellLevels(event) {
+    const element = event.currentTarget;
+    const value = element.value;
+    const shell = element.dataset.shell
+    const systemlink = "system."+shell;
+    this.actor.update({ [systemlink]: value });
   }
 }

@@ -366,23 +366,31 @@
 }
 
 .health{
-  height: 45px;
+  height: 45px !important;
   max-width: 45px;
 }
 .moreHealth{
-  height: 45px;
+  height: 45px !important;
   max-width: 45px;
 }
 .challengeDice{
-  height: 45px;
+  height: 45px !important;
   max-width: 45px;
 }
 .moreChallengeDice{
-  height: 45px;
+  height: 45px !important;
   max-width: 45px;
 }
 .giveBackChallengeDice{
-  height: 45px;
+  height: 45px !important;
+  max-width: 45px;
+}
+.removeDetriment{
+  height: 45px !important;
+  max-width: 45px;
+}
+.addDetriment{
+  height: 45px !important;
   max-width: 45px;
 }
 .rollButtons{
@@ -400,3 +408,50 @@
   color: #191813;
   padding: 4px;
 }
+
+.diceTray{
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 10px;
+}
+
+.above12{
+  position: relative;
+  text-align: center;
+  width: 50px;
+  height: 50px;
+}
+.centered{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width:100%;
+  font-weight: 900;
+  font-size: x-large;
+  color: blue;
+}
+.aside{
+  width: 35%;
+}
+.nuts .sheet-body .tab .editor {
+  height: 25% !important;
+}
+
+.green{
+  color:green !important;
+}
+
+.red{
+  color:red !important;
+}
+ .target{
+  font-size: x-large;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+ }

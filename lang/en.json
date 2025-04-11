@@ -24,6 +24,19 @@
       "Temporary": "Temporary Effects",
       "Passive": "Passive Effects",
       "Inactive": "Inactive Effects"
+    },
+    "Shells": {
+      "hardHitting": "Hard Hitting",
+      "defensive": "Defensive",
+      "comboMaker": "Combo Maker",
+      "surge": "Surge",
+      "companions": "Companions",
+      "protection": "Protection",
+      "itemEater": "Item Eater",
+      "crafter": "Crafter",
+      "durability": "Durability",
+      "endurance": "Endurance",
+      "lucky": "Lucky"
     }
   },
 

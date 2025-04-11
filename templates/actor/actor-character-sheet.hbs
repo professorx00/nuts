@@ -30,39 +30,99 @@
   </header>
   <div class="rollButtons">
       <a class="rollBtn" data-roll-type="cd" data-title="Challenge Roll" data-challenge-dice="{{actor.challengeDice.value}}">Challenge Roll</a>
-      <a class="rollBtn" data-roll-type="def" data-title="Defense Roll" data-challenge-dice="{{actor.challengeDice.value}}">Defense Roll</a>
   </div>
   {{!-- Sheet Tab Navigation --}}
   <nav class="sheet-tabs tabs" data-group="primary">
     {{!-- Default tab is specified in actor-sheet.mjs --}}
-    <a class="item" data-tab="shells">Shells</a>
-    <a class="item" data-tab="nut">NUT</a>
+    <a class="item" data-tab="nut">NUTS</a>
     <a class="item" data-tab="items">Items</a>
   </nav>
 
   {{!-- Sheet Body --}}
   <section class="sheet-body">
-    {{!-- Owned shells Tab --}}
-    <div class="tab shells" data-group="primary" data-tab="shells">
-          {{!-- This is a Handlebars partial. They're stored in the `/parts` folder next to this sheet, and defined in module/helpers/templates.mjs --}}
-          {{> "systems/nuts/templates/actor/parts/actor-shells.hbs"}}
-    </div>
-
     {{!-- Biography Tab --}}
     <div class="tab biography" data-group="primary" data-tab="nut">
       {{!-- Editors must receive enriched text data from getData to properly handle rolls --}}
-        <h1>Nature</h1>
-        {{editor enrichedNature target="system.nature" engine="prosemirror" button=true editable=editable}}
-    </div>
-    <div class="tab biography" data-group="primary" data-tab="nut">
-      {{!-- Editors must receive enriched text data from getData to properly handle rolls --}}
-        <h1>Utility</h1>
-        {{editor enrichedUtility target="system.utility" engine="prosemirror" button=true editable=editable}}
-    </div>
-    <div class="tab biography" data-group="primary" data-tab="nut">
-      {{!-- Editors must receive enriched text data from getData to properly handle rolls --}}
-        <h1>Tale</h1>
-        {{editor enrichedTale target="system.tale" engine="prosemirror" button=true editable=editable}}
+      <div class="flexrow">
+        <div class="aside">
+        <ol class='items-list'>
+          <li class='item flexrow items-header'>
+            <div class='item-name'>{{localize 'Name'}}</div>
+            <div class="item-prop">Level</div>
+          </li>
+          <li class='item flexrow' data-item-id='{{item._id}}'>
+              <div class='item-name'>{{localize 'NUTS.Shells.hardHitting'}}</div>
+                <div class="item-prop">
+                  <select name="hardHitting" data-shell="hardHitting" class="shellSelect">{{selectOptions system.shellLevels selected=system.hardHitting}}</select>
+                </div>
+          </li>
+           <li class='item flexrow' data-item-id='{{item._id}}'>
+              <div class='item-name'>{{localize 'NUTS.Shells.defensive'}}</div>
+                <div class="item-prop">
+                  <select name="defensive" data-shell="defensive" class="shellSelect">{{selectOptions system.shellLevels selected=system.defensive}}</select>
+                </div>
+          </li>
+           <li class='item flexrow' data-item-id='{{item._id}}'>
+              <div class='item-name'>{{localize 'NUTS.Shells.comboMaker'}}</div>
+                <div class="item-prop">
+                  <select name="comboMaker" data-shell="comboMaker" class="shellSelect">{{selectOptions system.shellLevels selected=system.comboMaker}}</select>
+                </div>
+          </li>
+           <li class='item flexrow' data-item-id='{{item._id}}'>
+              <div class='item-name'>{{localize 'NUTS.Shells.surge'}}</div>
+                <div class="item-prop">
+                  <select name="surge" data-shell="surge" class="shellSelect">{{selectOptions system.shellLevels selected=system.surge}}</select>
+                </div>
+          </li>
+           <li class='item flexrow' data-item-id='{{item._id}}'>
+              <div class='item-name'>{{localize 'NUTS.Shells.protection'}}</div>
+                <div class="item-prop">
+                  <select name="protection" data-shell="protection" class="shellSelect">{{selectOptions system.shellLevels selected=system.protection}}</select>
+                </div>
+          </li>
+           <li class='item flexrow' data-item-id='{{item._id}}'>
+              <div class='item-name'>{{localize 'NUTS.Shells.itemEater'}}</div>
+                <div class="item-prop">
+                  <select name="itemEater" data-shell="itemEater" class="shellSelect">{{selectOptions system.shellLevels selected=system.itemEater}}</select>
+                </div>
+          </li>
+           <li class='item flexrow' data-item-id='{{item._id}}'>
+              <div class='item-name'>{{localize 'NUTS.Shells.crafter'}}</div>
+                <div class="item-prop">
+                 <select name="crafter" data-shell="crafter" class="shellSelect">{{selectOptions system.shellLevels selected=system.crafter}}</select>
+                </div>
+          </li>
+           <li class='item flexrow' data-item-id='{{item._id}}'>
+              <div class='item-name'>{{localize 'NUTS.Shells.durability'}}</div>
+                <div class="item-prop">
+                  <select name="durability" data-shell="durability" class="shellSelect">{{selectOptions system.shellLevels selected=system.durability}}</select>
+                </div>
+          </li>
+           <li class='item flexrow' data-item-id='{{item._id}}'>
+              <div class='item-name'>{{localize 'NUTS.Shells.endurance'}}</div>
+                <div class="item-prop">
+                  <select name="endurance" data-shell="endurance" class="shellSelect">{{selectOptions system.shellLevels selected=system.endurance}}</select>
+                </div>
+          </li>
+          <li class='item flexrow' data-item-id='{{item._id}}'>
+              <div class='item-name'>{{localize 'NUTS.Shells.lucky'}}</div>
+                <div class="item-prop">
+                  <select name="lucky" data-shell="lucky" class="shellSelect">{{selectOptions system.shellLevels selected=system.lucky}}</select>
+                </div>
+          </li>
+        </ol>
+        </div>
+        <div class="biography">
+
+            <h1>Nature</h1>
+            {{editor enrichedNature target="system.nature" engine="prosemirror" button=true editable=editable}}
+          <h1>Utility</h1>
+          {{editor enrichedUtility target="system.utility" engine="prosemirror" button=true editable=editable}}
+          <h1>Tale</h1>
+          {{editor enrichedTale target="system.tale" engine="prosemirror" button=true editable=editable}}
+        </div>
+
+      </div>
     </div>
 
     {{!-- Owned Items Tab --}}
