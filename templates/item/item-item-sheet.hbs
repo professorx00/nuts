@@ -61,8 +61,8 @@
     <div class='tab attributes' data-group='primary' data-tab='attributes'>
       {{! As you add new fields, add them in here! }}
       <div class='resource'>
-        <label class='resource-label'>Roll Formula:</label>
-        <span>{{system.formula}}</span>
+        {{!-- <label class='resource-label'>Roll Formula:</label> --}}
+        {{!-- <span>{{system.formula}}</span>
         <div class='grid grid-4col'>
           <div class='grid-span-1'>
             <label class='resource-label'>Number of Dice</label>
@@ -91,8 +91,11 @@
               data-dtype='String'
             />
           </div>
-        </div>
-
+        </div> --}}
+        <div class="item-prop">
+        <label>Location</label>
+        <select name="Location" class="locationSelect">{{selectOptions system.itemLocation selected=system.location}}</select>
+      </div>
       </div>
     </div>
   </section>

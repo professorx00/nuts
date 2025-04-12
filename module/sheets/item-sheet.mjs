@@ -87,7 +87,13 @@ export class nutsItemSheet extends ItemSheet {
     html.on('click', '.effect-control', (ev) =>
       onManageActiveEffect(ev, this.item)
     );
-
+    
+    html.on("click", ".locationSelect", (ev) => {
+      const element = ev.currentTarget;
+      const value = element.value;
+      this.item.update({ "system.location": value });
+    });
+    
     html.on("click", ".levelSelect", (ev) => {
       const level = ev.target.value;
       this.item.update({ "system.level": level });

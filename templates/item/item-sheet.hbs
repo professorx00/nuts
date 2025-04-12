@@ -42,6 +42,10 @@
     {{! Attributes Tab }}
     <div class='tab attributes' data-group='primary' data-tab='attributes'>
       {{! As you add new fields, add them in here! }}
+      <div class="item-prop">
+        <label>Location</label>
+        <select name="Location" class="locationSelect">{{selectOptions system.itemLocation selected=system.location}}</select>
+      </div>
     </div>
   </section>
 </form>

@@ -122,6 +122,10 @@ Handlebars.registerHelper("everythingElse", function (result) {
     }
   }
 });
+Handlebars.registerHelper("getItemLocation", function (locations, location) {
+  let textLocation = locations[location];
+  return textLocation;
+});
 
 Handlebars.registerHelper(
   "detrimentsOverCD",

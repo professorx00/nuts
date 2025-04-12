@@ -1,7 +1,7 @@
 <ol class='items-list'>
   <li class='item flexrow items-header'>
     <div class='item-name'>{{localize 'Name'}}</div>
-    <div class='item-formula'>{{localize 'Roll Formula'}}</div>
+    <div class='item-formula'>Location</div>
     <div class='item-controls'>
       <a
         class='item-control item-create'
@@ -17,6 +17,17 @@
     <li class='item flexrow' data-item-id='{{item._id}}'>
       <div class='item-name'>
         <div class='item-image'>
+          <a class='info'  data-item-id='{{item._id}}'>
+            <img
+              src='systems/nuts/assets/info.png'
+              title='Information'
+              width='24'
+              height='24'
+            />
+          </a>
+        </div>
+      <div class='item-name'>
+        <div class='item-image'>
           <a class='rollable' data-roll-type='item'>
             <img
               src='{{item.img}}'
@@ -28,7 +39,7 @@
         </div>
         <h4>{{item.name}}</h4>
       </div>
-      <div class='item-formula item-prop'>{{item.system.formula}}</div>
+      <div class='item-formula item-prop'>{{getItemLocation item.system.itemLocation item.system.location}}</div>
       <div class='item-controls'>
         <a
           class='item-control item-edit'
@@ -42,6 +53,11 @@
         >
           <i class='fas fa-trash'></i>
         </a>
+      </div>
+    </li>
+    <li id="{{item._id}}" class='item flexrow hidden' data-item-id='{{item._id}}'>
+      <div class="item-description">
+        {{{item.system.description}}}
       </div>
     </li>
   {{/each}}

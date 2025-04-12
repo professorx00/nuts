@@ -99,7 +99,7 @@ export class nutsActorSheet extends ActorSheet {
         // Data to fill in for inline rolls
         rollData: this.actor.getRollData(),
         // Relative UUID resolution
-        relativeTo: this.actor,      
+        relativeTo: this.actor,
       }
     );
 
@@ -204,7 +204,7 @@ export class nutsActorSheet extends ActorSheet {
     html.on("click", ".moreChallengeDice", this._AddCD.bind(this));
     html.on("click", ".challengeDice", this._RemoveCD.bind(this));
     html.on("click", ".rollBtn", this._onRoll.bind(this));
-     html.on("click", ".shellSelect", this._setShellLevels.bind(this));
+    html.on("click", ".shellSelect", this._setShellLevels.bind(this));
 
     // Delete Inventory Item
     html.on("click", ".item-delete", (ev) => {
@@ -214,6 +214,7 @@ export class nutsActorSheet extends ActorSheet {
       li.slideUp(200, () => this.render(false));
     });
 
+    html.on("click", ".info", this._getInfo.bind(this));
     // Active Effect management
     html.on("click", ".effect-control", (ev) => {
       const row = ev.currentTarget.closest("li");
@@ -265,6 +266,14 @@ export class nutsActorSheet extends ActorSheet {
     return await Item.create(itemData, { parent: this.actor });
   }
 
+  _getInfo(event){
+    const element = event.currentTarget;
+    const dataset = element.dataset;
+    const item_id = dataset.itemId;
+    const descriptionEl = document.getElementById(item_id);
+    descriptionEl.classList.toggle("hidden");
+  }
+
   /**
    * Handle clickable rolls.
    * @param {Event} event   The originating click event
@@ -284,7 +293,6 @@ export class nutsActorSheet extends ActorSheet {
     // }
     const challengeDice = this.actor.system.challengeDice.value;
     this._getBoonDialog(challengeDice, dataset.title);
-
   }
 
   /**
@@ -312,14 +320,19 @@ export class nutsActorSheet extends ActorSheet {
   }
 
   async _getBoonDialog(data, title) {
-    const rollDialog = new game.nuts.nutsRollDialog(this.actor, data, title,this.actor.system.targets);
+    const rollDialog = new game.nuts.nutsRollDialog(
+      this.actor,
+      data,
+      title,
+      this.actor.system.targets
+    );
     rollDialog.render(true);
   }
   _setShellLevels(event) {
     const element = event.currentTarget;
     const value = element.value;
-    const shell = element.dataset.shell
-    const systemlink = "system."+shell;
+    const shell = element.dataset.shell;
+    const systemlink = "system." + shell;
     this.actor.update({ [systemlink]: value });
   }
 }
