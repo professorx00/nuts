@@ -2,14 +2,14 @@
 
   {{!-- Sheet Header --}}
   <header class="sheet-header">
-    <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100"/>
+    <img class="profile-img nutProfile" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100"/>
     <div class="header-fields">
       <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
       {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
       use both the "grid" and "grid-Ncol" class where "N" can be any number
       from 1 to 12 and will create that number of columns.  --}}
       <div class="resources flexrow">
-        <label for="system.health.value" class="resource-label">HP</label>
+        <h3 for="system.health.value" class="resource-label">HP</h3>
       </div>
       <div class="resources flexrow">
         {{#times system.health.value}}
@@ -18,7 +18,7 @@
         <img class="moreHealth" src="systems/nuts/assets/acorn_empty_plus.png" title="empty health" />
       </div>
        <div class="resources flexrow">
-        <label for="system.challengeDice.value" class="resource-label">Challenge Dice</label>
+        <h3 for="system.challengeDice.value" class="resource-label">Challenge Dice</h3>
       </div>
       <div class="resources flexrow">
         {{#times system.challengeDice.value}}
@@ -30,6 +30,8 @@
   </header>
   <div class="rollButtons">
       <a class="rollBtn" data-roll-type="cd" data-title="Challenge Roll" data-challenge-dice="{{actor.challengeDice.value}}">Challenge Roll</a>
+      <a class="rollBtn" data-roll-type="cd" data-title="Challenge Roll" data-challenge-dice="{{actor.challengeDice.value}}">Challenge Roll  <img class="cdsBtnIcon" src="systems/nuts/assets/attack_white.png"/></a>
+      <a class="rollBtn" data-roll-type="cd" data-title="Challenge Roll" data-challenge-dice="{{actor.challengeDice.value}}">Challenge Roll  <img class="cdsBtnIcon" src="systems/nuts/assets/defense_white.png"/></a>
   </div>
   {{!-- Sheet Tab Navigation --}}
   <nav class="sheet-tabs tabs" data-group="primary">
@@ -111,8 +113,9 @@
                 </div>
           </li>
         </ol>
+        <img class="logo" src="systems/nuts/assets/logo.png" title="Logo" />
         </div>
-        <div class="biography">
+        <div class="nutDetails">
 
             <h1>Nature</h1>
             {{editor enrichedNature target="system.nature" engine="prosemirror" button=true editable=editable}}

@@ -66,9 +66,8 @@ export class nutsActor extends Actor {
     return result;
   }
 
-  async roll(dice, target) {
-    let newDice = dice + 1;
-    console.log("target", target);
+  async roll(dice, target, benefit) {
+    let newDice = dice + 1 + benefit;
     let formula = newDice + "d12";
     const roll = new Roll(formula, this);
     let dices = roll.dice[0].results;
@@ -79,7 +78,6 @@ export class nutsActor extends Actor {
       dices: dices,
       target: target,
     };
-    console.log("rollData", rollData);
     let cardContent = await renderTemplate(
       "systems/nuts/templates/chat/challengeRoll.hbs",
       rollData
@@ -96,8 +94,6 @@ export class nutsActor extends Actor {
     await ChatMessage.create(chatData);
   }
   async defensiveRoll(dice, level, gameType) {
-    console.log("defensive Roll");
-    console.log(level);
     this.roll(dice);
   }
 

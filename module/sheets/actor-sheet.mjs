@@ -13,7 +13,7 @@ export class nutsActorSheet extends ActorSheet {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["nuts", "sheet", "actor"],
       width: 700,
-      height: 700,
+      height: 1000,
       tabs: [
         {
           navSelector: ".sheet-tabs",

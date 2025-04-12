@@ -1,29 +1,40 @@
 <form class="{{cssClass}} {{actor.type}} flexcol" autocomplete="off">
-    <h1>{{newTitle}}</h1>
-     <div class="resources flexrow">
-        {{#times challengeDice}}
-            <img class="challengeDice" src="systems/nuts/assets/acorn_challenge.png" title="Challenge Dice" />
-        {{/times}}
-        {{#times dice}}
-            <img class="giveBackChallengeDice" src="systems/nuts/assets/acorn_empty.png" title="Challenge Dice" />
-        {{/times}}
-    </div>
-    <span>You choose this man challenge dice {{dice}}</span>
     <div class="flexcol">
-        <span>Detriments</span>
-        <div class="resources flexrow">
-            {{#times detriment}}
-                <img class="removeDetriment" src="systems/nuts/assets/detriment.png" title="Challenge Dice" />
-            {{/times}}
-            <img class="addDetriment" src="systems/nuts/assets/detrimentAdd.png" title="Challenge Dice" />
+        <h1>{{newTitle}}</h1>
+        <div class="flexcol">
+            <h3>You choose this man challenge dice {{dice}}</h3>
+            <div class="resources flexrow">
+                {{#times challengeDice}}
+                    <img class="challengeDice" src="systems/nuts/assets/acorn_challenge.png" title="Challenge Dice" />
+                {{/times}}
+                {{#times dice}}
+                    <img class="giveBackChallengeDice" src="systems/nuts/assets/acorn_empty.png" title="Challenge Dice" />
+                {{/times}}
+            </div>
         </div>
-        <div>
+        <div class="flexcol">
+            <h3>Detriments</h3>
+            <div class="resources flexrow">
+                {{#times detriment}}
+                    <img class="removeDetriment" src="systems/nuts/assets/detriment.png" title="Challenge Dice" />
+                {{/times}}
+                    <img class="addDetriment" src="systems/nuts/assets/detrimentAdd.png" title="Challenge Dice" />
+            </div>
+        </div>
+        <div class="flexcol">
+            <h3>Benefits</h3>
+            <div class="resources flexrow">
+                {{#times benefit}}
+                    <img class="removeBenefit" src="systems/nuts/assets/benefit.png" title="Challenge Dice" />
+                {{/times}}
+                    <img class="addBenefit" src="systems/nuts/assets/plusBenefit.png" title="Challenge Dice" />
+            </div>
+        </div>
         <div class="item-prop">
         <label>Target Number for the Roll</label>
         <select name="targetNumber" class="targetSelect">{{selectOptions this.actor.system.targets selected=this.actor.system.target}}</select>
         </div>
-        </div>
-        {{#if (detrimentsOverCD detriment dice)}}
+        {{#if (detrimentsOverCD detriment dice benefit)}}
             <a class="rollBtn" data-target="{{this.actor.system.target}}">Roll</a>
             {{!-- <div>
                 {{#if (checkValueOverZero this.actor.system.hardHitting)}}

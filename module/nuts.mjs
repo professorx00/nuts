@@ -123,13 +123,17 @@ Handlebars.registerHelper("everythingElse", function (result) {
   }
 });
 
-Handlebars.registerHelper("detrimentsOverCD", function (detriments, cds) {
-  if (detriments < cds + 1) {
-    return true;
-  } else {
-    return false;
+Handlebars.registerHelper(
+  "detrimentsOverCD",
+  function (detriments, cds, benefit) {
+    let NewCDS = cds + benefit + 1;
+    if (detriments < NewCDS) {
+      return true;
+    } else {
+      return false;
+    }
   }
-});
+);
 Handlebars.registerHelper("checkValueOverZero", function (value) {
   if (value > 0) {
     return true;
@@ -232,6 +236,7 @@ class nutsRollDialog extends Application {
     this.detriment = 0;
     this.gameType = game.settings.get("nuts", "gameType");
     this.targets = actor.system.targets;
+    this.benefit = 0;
   }
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
@@ -253,6 +258,7 @@ class nutsRollDialog extends Application {
       detriment: this.detriment,
       gameType: this.gameType,
       targets: this.targets,
+      benefit: this.benefit,
     };
   }
   activateListeners(html) {
@@ -263,6 +269,8 @@ class nutsRollDialog extends Application {
     html.find(".rollBtn").click((ev) => this._roll(ev));
     html.find(".removeDetriment").click((ev) => this._removeDetriments(ev));
     html.find(".addDetriment").click((ev) => this._addDetriments(ev));
+    html.find(".addBenefit").click((ev) => this._addBenefit(ev));
+    html.find(".removeBenefit").click((ev) => this._removeBenefit(ev));
     html.find(".shellBtn").click((ev) => this._useShell(ev));
     html.find(".targetSelect").change((ev) => {
       this._targetNumberSelect(ev);
@@ -279,15 +287,28 @@ class nutsRollDialog extends Application {
   }
 
   _addDetriments(ev) {
-    console.log("add Detriment");
+    console.log(this.benefit);
     this.detriment = this.detriment + 1;
     this.render();
   }
   _removeDetriments(ev) {
-    console.log("minus Detriment");
+    console.log(this.benefit);
     this.detriment = this.detriment - 1;
     if (this.detriment < 0) {
       this.detriment = 0;
+    }
+    this.render();
+  }
+
+  _addBenefit(ev) {
+    console.log("add benefit");
+    this.benefit = this.benefit + 1;
+    this.render();
+  }
+  _removeBenefit(ev) {
+    this.benefit = this.benefit - 1;
+    if (this.benefit < 0) {
+      this.benefit = 0;
     }
     this.render();
   }
@@ -305,7 +326,7 @@ class nutsRollDialog extends Application {
     const dataset = element.dataset;
     const target = this.actor.system.target;
     console.log(target);
-    let roll = this.actor.roll(this.dice, target);
+    let roll = this.actor.roll(this.dice, target, this.benefit);
     if (roll) {
       this.close();
     }

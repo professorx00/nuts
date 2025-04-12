@@ -368,53 +368,108 @@
 .health{
   height: 45px !important;
   max-width: 45px;
+  border: none;
 }
 .moreHealth{
   height: 45px !important;
   max-width: 45px;
+  border: none;
 }
 .challengeDice{
   height: 45px !important;
   max-width: 45px;
+  border: none;
 }
 .moreChallengeDice{
   height: 45px !important;
   max-width: 45px;
+  border: none;
 }
 .giveBackChallengeDice{
   height: 45px !important;
   max-width: 45px;
+  border: none;
 }
 .removeDetriment{
   height: 45px !important;
   max-width: 45px;
+  border: none;
 }
 .addDetriment{
   height: 45px !important;
   max-width: 45px;
+  border: none;
+}
+.removeBenefit{
+  height: 45px !important;
+  max-width: 45px;
+  border: none;
+}
+.addBenefit{
+  height: 45px !important;
+  max-width: 45px; 
+  border: none;
 }
 .rollButtons{
-  max-height: 45px;
+  max-height: 50px;
   display:flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-}
-.rollBtn{
-  height: 35px;
-  background: burlywood;
-  font-size: medium;
-  text-align: center;
-  color: #191813;
-  padding: 4px;
+  margin: 5px;
 }
 
+.rollBtn {
+	box-shadow:inset 0px 1px 0px 0px #f5978e;
+	background:linear-gradient(to bottom, #f24537 5%, #c62d1f 100%);
+	background-color:#f24537;
+	border-radius:6px;
+	border:1px solid #d02718;
+	display:flex;
+  direction: row;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #810e05;
+  justify-content: center;
+  align-items: center;
+  min-height: 40px;
+}
+.rollBtn:hover {
+	background:linear-gradient(to bottom, #c62d1f 5%, #f24537 100%);
+	background-color:#c62d1f;
+}
+.rollBtn:active {
+	position:relative;
+	top:1px;
+}
+.cdsBtnIcon{
+  height: 25px !important;
+  max-width: 25px;
+  margin-left: 6px;
+  border: none;
+}
 .diceTray{
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(3, 1fr);
   grid-column-gap: 0px;
   grid-row-gap: 10px;
+}
+.logo{
+  border: none;
+}
+.nutDetails{
+  max-height: 150px;
+}
+
+.nutProfile{
+  flex: 0 0 200px !important;
+  height: 200px !important;
 }
 
 .above12{
