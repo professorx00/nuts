@@ -112,6 +112,18 @@
                   <select name="lucky" data-shell="lucky" class="shellSelect">{{selectOptions system.shellLevels selected=system.lucky}}</select>
                 </div>
           </li>
+          <li class='item flexrow' data-item-id='{{item._id}}'>
+              <div class='item-name'>{{localize 'NUTS.Shells.shift'}}</div>
+                <div class="item-prop">
+                  <select name="shift" data-shell="shift" class="shellSelect">{{selectOptions system.shellLevels selected=system.shift}}</select>
+                </div>
+          </li>
+          <li class='item flexrow' data-item-id='{{item._id}}'>
+              <div class='item-name'>{{localize 'NUTS.Shells.companion'}}</div>
+                <div class="item-prop">
+                  <select name="companion" data-shell="companion" class="shellSelect">{{selectOptions system.shellLevels selected=system.companion}}</select>
+                </div>
+          </li>
         </ol>
         <img class="logo" src="systems/nuts/assets/logo.png" title="Logo" />
         </div>

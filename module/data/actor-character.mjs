@@ -79,6 +79,14 @@ export default class nutsCharacter extends nutsActorBase {
     schema.lucky = new fields.NumberField({
       ...requiredInteger,
       initial: 0,
+    });
+    schema.shift = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0,
+    });
+    schema.companion = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0,
     });    
     // Iterate over ability names and create a new SchemaField for each.
     schema.abilities = new fields.SchemaField(Object.keys(CONFIG.NUTS.abilities).reduce((obj, ability) => {
