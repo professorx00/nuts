@@ -90,6 +90,10 @@ export class nutsActor extends Actor {
       }
     }
 
+    if(success.length == 0){
+      kickback = 1;
+    }
+
     if (success.length > 0) {
       if (rollType == "cdAttack") {
         damage = 1;
@@ -119,6 +123,9 @@ export class nutsActor extends Actor {
     if (game.dice3d) {
       await game.dice3d.showForRoll(roll, game.user, true);
     }
+    this.update({
+      "system.challengeDice.value": this.system.challengeDice.value + kickback,
+    });
     await ChatMessage.create(chatData);
   }
 
@@ -183,9 +190,7 @@ export class nutsActor extends Actor {
     let surgeLevel = "trained";
     let surgeLevelsecond = "trained";
 
-    if (success == 0) {
-      kickback = 1;
-    }
+    
 
     for (let i = 0; i < values.length; i++) {
       if (i >= 1) {
@@ -214,6 +219,11 @@ export class nutsActor extends Actor {
       if (values[i] == 1) {
         ones.push(values[i]);
       }
+    }
+
+    console.log("successes", success.length);
+    if (success.length == 0) {
+      kickback = 1;
     }
 
     if (shell === "hardHitting") {
