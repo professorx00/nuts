@@ -23,6 +23,39 @@ export default class nutsCharacter extends nutsActorBase {
       6: new fields.NumberField({ ...requiredInteger, initial: 6 }),
     });
 
+    schema.surgeOptionsList = new fields.SchemaField({
+      a: new fields.StringField({
+        initial: "Damage an adjacent enemy for 1 HP.",
+      }),
+      b: new fields.StringField({ initial: "Attack hits for +1 damage." }),
+      c: new fields.StringField({
+        initial: "Next player to attack target has guaranteed critical on hit.",
+      }),
+      d: new fields.StringField({
+        initial: "Next player to attack target has a guaranteed hit.",
+      }),
+      e: new fields.StringField({
+        initial: "Adds +1 Benefit to next Player defending against target.",
+      }),
+      f: new fields.StringField({
+        initial: "You and all other players receive +1 Challenge Die.",
+      }),
+    });
+
+    schema.surgeOptionFirst = new fields.StringField({
+      initial: "a",
+    });
+    schema.surgeOptionSecond = new fields.StringField({
+      initial: "b",
+    });
+
+    schema.companionSummon = new fields.BooleanField({
+      initial: false,
+    });
+    schema.shifting = new fields.BooleanField({
+      initial: false,
+    });
+
     schema.targets = new fields.SchemaField({
       1: new fields.NumberField({ ...requiredInteger, initial: 1 }),
       2: new fields.NumberField({ ...requiredInteger, initial: 2 }),
@@ -39,7 +72,10 @@ export default class nutsCharacter extends nutsActorBase {
     });
 
     schema.target = new fields.NumberField({ ...requiredInteger, initial: 6 });
-
+    schema.safetyNet = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0,
+    });
     schema.hardHitting = new fields.NumberField({
       ...requiredInteger,
       initial: 0,

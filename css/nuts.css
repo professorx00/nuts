@@ -375,6 +375,16 @@
   max-width: 45px;
   border: none;
 }
+.tempHealth{
+  height: 45px !important;
+  max-width: 45px;
+  border: none;
+}
+.moreTempHealth{
+  height: 45px !important;
+  max-width: 45px;
+  border: none;
+}
 .challengeDice{
   height: 45px !important;
   max-width: 45px;
@@ -438,6 +448,7 @@
   justify-content: center;
   align-items: center;
   min-height: 40px;
+  margin: 5px;
 }
 .rollBtn:hover {
 	background:linear-gradient(to bottom, #c62d1f 5%, #f24537 100%);
@@ -507,3 +518,95 @@
   justify-content: center;
   align-items: center;
  }
+
+ .shellBtn {
+	box-shadow: 0px 10px 14px -7px #276873;
+	background:linear-gradient(to bottom, #599bb3 5%, #408c99 100%);
+	background-color:#599bb3;
+	border-radius:8px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:20px;
+	font-weight:bold;
+	padding:10px 10px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #3d768a;
+}
+.shellBtn:hover {
+	background:linear-gradient(to bottom, #408c99 5%, #599bb3 100%);
+	background-color:#408c99;
+}
+.shellBtn:active {
+	position:relative;
+	top:1px;
+}
+.shellBox{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  grid-column-gap: 2px;
+  grid-row-gap: 10px;
+}
+.gridItem{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.rollAgainBtn {
+	box-shadow: 0px 1px 0px 0px #fff6af;
+	background:linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
+	background-color:#ffec64;
+	border-radius:6px;
+	border:1px solid #ffaa22;
+	display:inline-block;
+	cursor:pointer;
+	color:#333333;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #ffee66;
+}
+.rollAgainBtn:hover {
+	background:linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
+	background-color:#ffab23;
+}
+.rollAgainBtn:active {
+	position:relative;
+	top:1px;
+}
+
+.rollAgainContainer{
+  width: 100%;
+}
+
+.surgeBtn {
+	box-shadow: 0px 1px 0px 0px #fff6af;
+	background:linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
+	background-color:#ffec64;
+	border-radius:6px;
+	border:1px solid #ffaa22;
+	display:inline-block;
+	cursor:pointer;
+	color:#333333;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #ffee66;
+}
+.surgeBtn:hover {
+	background:linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
+	background-color:#ffab23;
+}
+.surgeBtn:active {
+	position:relative;
+	top:1px;
+}

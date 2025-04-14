@@ -18,6 +18,15 @@
         <img class="moreHealth" src="systems/nuts/assets/acorn_empty_plus.png" title="empty health" />
       </div>
        <div class="resources flexrow">
+        <h3 for="system.health.value" class="resource-label">Temp HP</h3>
+      </div>
+      <div class="resources flexrow">
+        {{#times system.tempHealth.value}}
+            <img class="tempHealth" src="systems/nuts/assets/acorn_temp_health.png" title="health" />
+        {{/times}}
+        <img class="moreTempHealth" src="systems/nuts/assets/acorn_empty_plus.png" title="empty health" />
+      </div>
+       <div class="resources flexrow">
         <h3 for="system.challengeDice.value" class="resource-label">Challenge Dice</h3>
       </div>
       <div class="resources flexrow">
@@ -30,8 +39,8 @@
   </header>
   <div class="rollButtons">
       <a class="rollBtn" data-roll-type="cd" data-title="Challenge Roll" data-challenge-dice="{{actor.challengeDice.value}}">Challenge Roll</a>
-      <a class="rollBtn" data-roll-type="cd" data-title="Challenge Roll" data-challenge-dice="{{actor.challengeDice.value}}">Challenge Roll  <img class="cdsBtnIcon" src="systems/nuts/assets/attack_white.png"/></a>
-      <a class="rollBtn" data-roll-type="cd" data-title="Challenge Roll" data-challenge-dice="{{actor.challengeDice.value}}">Challenge Roll  <img class="cdsBtnIcon" src="systems/nuts/assets/defense_white.png"/></a>
+      <a class="rollBtn" data-roll-type="cdAttack" data-title="Challenge Roll" data-challenge-dice="{{actor.challengeDice.value}}">Challenge Roll  <img class="cdsBtnIcon" src="systems/nuts/assets/attack_white.png"/></a>
+      <a class="rollBtn" data-roll-type="cdDef" data-title="Challenge Roll" data-challenge-dice="{{actor.challengeDice.value}}">Challenge Roll  <img class="cdsBtnIcon" src="systems/nuts/assets/defense_white.png"/></a>
   </div>
   {{!-- Sheet Tab Navigation --}}
   <nav class="sheet-tabs tabs" data-group="primary">
@@ -76,6 +85,22 @@
                   <select name="surge" data-shell="surge" class="shellSelect">{{selectOptions system.shellLevels selected=system.surge}}</select>
                 </div>
           </li>
+          {{#if (surgeOverFirst system.surge )}}
+            <li class='item flexrow' data-item-id='{{item._id}}'>
+              <div class='item-name'>{{localize 'NUTS.Shells.surge'}} Option 1</div>
+                <div class="item-prop">
+                  <select name="surgeOptions" data-num="First" class="surgeOptions">{{selectOptions system.surgeOptionsList selected=system.surgeOptionFirst}}</select>
+                </div>
+            </li>
+          {{/if}}
+          {{#if (surgeOverSecond system.surge )}}
+            <li class='item flexrow' data-item-id='{{item._id}}'>
+              <div class='item-name'>{{localize 'NUTS.Shells.surge'}} Option 2</div>
+                <div class="item-prop">
+                  <select name="surgeOptions" data-num="Second" class="surgeOptions">{{selectOptions system.surgeOptionsList selected=system.surgeOptionSecond}}</select>
+                </div>
+            </li>
+          {{/if}}
            <li class='item flexrow' data-item-id='{{item._id}}'>
               <div class='item-name'>{{localize 'NUTS.Shells.protection'}}</div>
                 <div class="item-prop">

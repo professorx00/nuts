@@ -1,4 +1,7 @@
+<h2>{{shellLabel}}</h2>
 <div class="target">Target: {{target}}</div>
+<div class="target">Damage: {{damage}}</div>
+<div class="target">Kickbacks: {{kickback}}</div>
 <div class="diceTray">
     {{#each dices}}
         {{#if (above12 this.result)}}
@@ -25,3 +28,23 @@
         {{/if}}
     {{/each}}
 </div>
+{{#if rollAgain}}    
+    <div class="rollAgainContainer">
+        <a class="rollAgainBtn" data-numDice="{{numDice}}" data-rolltype="rollAgain" data-actor-id="{{actor}}" data-target="{{target}}" data-damage="{{damage}}" data-shell="comboMaker" data-target="{{this.actor.system.target}}">Roll Again</a>
+    </div>
+{{/if}}
+{{#if (summonCompanion shell)}}
+    <div class="target">Companion Hit Points: {{hitPoints}}</div>
+{{/if}}
+{{#if (protection shell)}}
+    <div class="target">Temp Hit Points: {{tempHitPoints}}</div>
+{{/if}}
+
+{{#if (surgeOptions ones twelves rollType shell)}}
+    {{#if surgeLevel}}
+        <a class="surgeBtn" data-option="{{surgeOptionOne}}">{{surgeOptionOne}}</a>
+    {{/if}}
+    {{#if surgeLevelsecond}}
+        <a class="surgeBtn" data-option="{{surgeOptionTwo}}">{{surgeOptionTwo}}</a>
+    {{/if}}
+{{/if}}

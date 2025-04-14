@@ -13,7 +13,7 @@ export class nutsActorSheet extends ActorSheet {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["nuts", "sheet", "actor"],
       width: 700,
-      height: 1000,
+      height: 1100,
       tabs: [
         {
           navSelector: ".sheet-tabs",
@@ -200,11 +200,16 @@ export class nutsActorSheet extends ActorSheet {
     html.on("click", ".moreHealth", this._AddHealth.bind(this));
     html.on("click", ".health", this._RemoveHealth.bind(this));
 
+    //Update HP
+    html.on("click", ".moreTempHealth", this._AddTempHealth.bind(this));
+    html.on("click", ".tempHealth", this._RemoveTempHealth.bind(this));
+
     //Update ChallengeDice
     html.on("click", ".moreChallengeDice", this._AddCD.bind(this));
     html.on("click", ".challengeDice", this._RemoveCD.bind(this));
     html.on("click", ".rollBtn", this._onRoll.bind(this));
     html.on("click", ".shellSelect", this._setShellLevels.bind(this));
+    html.on("click", ".surgeOptions", this._setSurgeOptions.bind(this));
 
     // Delete Inventory Item
     html.on("click", ".item-delete", (ev) => {
@@ -266,7 +271,7 @@ export class nutsActorSheet extends ActorSheet {
     return await Item.create(itemData, { parent: this.actor });
   }
 
-  _getInfo(event){
+  _getInfo(event) {
     const element = event.currentTarget;
     const dataset = element.dataset;
     const item_id = dataset.itemId;
@@ -292,7 +297,7 @@ export class nutsActorSheet extends ActorSheet {
     //   }
     // }
     const challengeDice = this.actor.system.challengeDice.value;
-    this._getBoonDialog(challengeDice, dataset.title);
+    this._getBoonDialog(challengeDice, dataset.title, dataset.rollType, 0);
   }
 
   /**
@@ -305,6 +310,17 @@ export class nutsActorSheet extends ActorSheet {
   _RemoveHealth(event) {
     let hp = this.actor.system.health.value - 1;
     this.actor.update({ "system.health.value": hp });
+  }
+  /**
+   * Handle more Temp Health
+   */
+  _AddTempHealth(event) {
+    let hp = this.actor.system.tempHealth.value + 1;
+    this.actor.update({ "system.tempHealth.value": hp });
+  }
+  _RemoveTempHealth(event) {
+    let hp = this.actor.system.tempHealth.value - 1;
+    this.actor.update({ "system.tempHealth.value": hp });
   }
 
   /**
@@ -319,12 +335,14 @@ export class nutsActorSheet extends ActorSheet {
     this.actor.update({ "system.challengeDice.value": hp });
   }
 
-  async _getBoonDialog(data, title) {
+  async _getBoonDialog(data, title, rollType, shell, numDice) {
     const rollDialog = new game.nuts.nutsRollDialog(
       this.actor,
       data,
       title,
-      this.actor.system.targets
+      rollType,
+      shell,
+      numDice
     );
     rollDialog.render(true);
   }
@@ -334,5 +352,12 @@ export class nutsActorSheet extends ActorSheet {
     const shell = element.dataset.shell;
     const systemlink = "system." + shell;
     this.actor.update({ [systemlink]: value });
+  }
+  _setSurgeOptions(event) {
+    const element = event.currentTarget;
+    const value = element.value;
+    const num = element.dataset.num;
+    const location = "system.surgeOption" + num;
+    this.actor.update({ [location]: value });
   }
 }

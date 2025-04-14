@@ -11,6 +11,10 @@ export default class nutsActorBase extends nutsDataModel {
       value: new fields.NumberField({ ...requiredInteger, initial: 3, min: 0 }),
       max: new fields.NumberField({ ...requiredInteger, initial: 3 })
     });
+    schema.tempHealth = new fields.SchemaField({
+      value: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
+      max: new fields.NumberField({ ...requiredInteger, initial: 6 }),
+    });
     schema.challengeDice = new fields.SchemaField({
       value: new fields.NumberField({ ...requiredInteger, initial: 6, min: 0 }),
       max: new fields.NumberField({ ...requiredInteger, initial: 6 }),

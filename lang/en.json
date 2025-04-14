@@ -38,7 +38,10 @@
       "endurance": "Endurance",
       "lucky": "Lucky",
       "shift": "Shift",
-      "companion": "Companion"
+      "shifting": "Shift Challenge",
+      "companion": "Companion",
+      "companionSummon": "Companion Summon",
+      "companionUse": "Companion Use"
     }
   },
 

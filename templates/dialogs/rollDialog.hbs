@@ -36,38 +36,58 @@
         </div>
         {{#if (detrimentsOverCD detriment dice benefit)}}
             <a class="rollBtn" data-target="{{this.actor.system.target}}">Roll</a>
-            {{!-- <div>
+            <div class="shellBox">
                 {{#if (checkValueOverZero this.actor.system.hardHitting)}}
-                    <div><a class="shellBtn" data-shell="hardHitting" data-target="{{this.actor.system.target}}">Use Hard Hitting</a></div>
+                    <div class="gridItem"><a class="shellBtn" data-shell="hardHitting" data-target="{{this.actor.system.target}}">Use Hard Hitting</a></div>
                 {{/if}}
                 {{#if (checkValueOverZero this.actor.system.defensive)}}
-                    <div><a class="shellBtn" data-shell="defensive" data-target="{{this.actor.system.target}}">Use Defensive</a></div>
+                    <div class="gridItem"><a class="shellBtn" data-shell="defensive" data-target="{{this.actor.system.target}}">Use Defensive</a></div>
                 {{/if}}
                 {{#if (checkValueOverZero this.actor.system.comboMaker)}}
                     <div><a class="shellBtn" data-shell="comboMaker" data-target="{{this.actor.system.target}}">Use Combo Maker</a></div>
                 {{/if}}
                 {{#if (checkValueOverZero this.actor.system.surge)}}
-                    <div><a class="shellBtn" data-shell="surge" data-target="{{this.actor.system.target}}">Use Surge</a></div>
+                    <div class="gridItem"><a class="shellBtn" data-shell="surge" data-target="{{this.actor.system.target}}">Use Surge</a></div>
                 {{/if}}
                 {{#if (checkValueOverZero this.actor.system.protection)}}
-                    <div><a class="shellBtn" data-shell="protection" data-target="{{this.actor.system.target}}">Use Protection</a></div>
+                    <div class="gridItem"><a class="shellBtn" data-shell="protection" data-target="{{this.actor.system.target}}">Use Protection</a></div>
                 {{/if}}
                 {{#if (checkValueOverZero this.actor.system.itemEater)}}
-                    <div><a class="shellBtn" data-shell="itemEater" data-target="{{this.actor.system.target}}">Use Item Eater</a></div>
+                    <div class="gridItem"><a class="shellBtn" data-shell="itemEater" data-target="{{this.actor.system.target}}">Use Item Eater</a></div>
                 {{/if}}
                 {{#if (checkValueOverZero this.actor.system.crafter)}}
-                    <div><a class="shellBtn" data-shell="crafter" data-target="{{this.actor.system.target}}">Use Crafter</a></div>
+                    <div class="gridItem"><a class="shellBtn" data-shell="crafter" data-target="{{this.actor.system.target}}">Use Crafter</a></div>
                 {{/if}}
                 {{#if (checkValueOverZero this.actor.system.durability)}}
-                    <div><a class="shellBtn" data-shell="durability" data-target="{{this.actor.system.target}}">Use Durability</a></div>
+                    <div class="gridItem"><a class="shellBtn" data-shell="durability" data-target="{{this.actor.system.target}}">Use Durability</a></div>
                 {{/if}}
                 {{#if (checkValueOverZero this.actor.system.endurance)}}
-                    <div><a class="shellBtn" data-shell="endurance" data-target="{{this.actor.system.target}}">Use Endurance</a></div>
+                    <div class="gridItem"><a class="shellBtn" data-shell="endurance" data-target="{{this.actor.system.target}}">Use Endurance</a></div>
                 {{/if}}
                 {{#if (checkValueOverZero this.actor.system.lucky)}}
-                    <div><a class="shellBtn" data-shell="lucky" data-target="{{this.actor.system.target}}">Use Lucky</a></div>
+                    <div class="gridItem"><a class="shellBtn" data-shell="lucky" data-target="{{this.actor.system.target}}">Use Lucky</a></div>
                 {{/if}}
-            </div> --}}
+                 {{#if (checkValueOverZero this.actor.system.shift)}}
+                {{/if}}
+                {{#if this.actor.system.shifting}}
+                    {{#if (checkValueOverZero this.actor.system.shift)}}
+                        <div class="gridItem"><a class="shellBtn" data-shell="shift" data-target="{{this.actor.system.target}}">Use Shift</a></div>
+                        <div class="gridItem"><a class="shellBtn" data-shell="unshift" data-target="{{this.actor.system.target}}">Shift Back</a></div>
+                    {{/if}}
+                {{else}}
+                    {{#if (checkValueOverZero this.actor.system.shift)}}
+                        <div class="gridItem"><a class="shellBtn" data-shell="shifting" data-target="{{this.actor.system.target}}">Shift</a></div>
+                    {{/if}}
+                {{/if}}
+                {{#if (checkValueOverZero this.actor.system.companion)}}
+                    {{#if this.actor.system.companionSummon}}
+                        <div class="gridItem"><a class="shellBtn" data-shell="companionUse" data-target="{{this.actor.system.target}}">Companion Use</a></div>
+                        <div class="gridItem"><a class="shellBtn" data-shell="companionDismiss" data-target="{{this.actor.system.target}}">Companion Dismiss</a></div>
+                    {{else}}
+                        <div class="gridItem"><a class="shellBtn" data-shell="companionSummon" data-target="{{this.actor.system.target}}">Summon Companion</a></div>
+                    {{/if}}
+                {{/if}}
+            </div>
         {{/if}}
     </div>
 </form>

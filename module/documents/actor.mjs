@@ -66,17 +66,43 @@ export class nutsActor extends Actor {
     return result;
   }
 
-  async roll(dice, target, benefit) {
+  async roll(dice, target, benefit, rollType) {
     let newDice = dice + 1 + benefit;
+    let damage = 0;
+    let kickback = 0;
     let formula = newDice + "d12";
     const roll = new Roll(formula, this);
+    await roll.evaluate();
     let dices = roll.dice[0].results;
+    let values = roll.dice[0].values;
+    let twelves = [];
+    let ones = [];
+    let success = [];
+    for (let i = 0; i <= values.length; i++) {
+      if (values[i] >= parseInt(target)) {
+        success.push(values[i]);
+      }
+      if (values[i] == 12) {
+        twelves.push(values[i]);
+      }
+      if (values[i] == 1) {
+        ones.push(values[i]);
+      }
+    }
+
+    if (success.length > 0) {
+      if (rollType == "cdAttack") {
+        damage = 1;
+      }
+    }
     const rollData = {
       rollHTML: await roll.render(),
       roll: roll._total,
       formula: formula,
       dices: dices,
       target: target,
+      damage: damage,
+      kickback: kickback,
     };
     let cardContent = await renderTemplate(
       "systems/nuts/templates/chat/challengeRoll.hbs",
@@ -90,14 +116,298 @@ export class nutsActor extends Actor {
       flags: { "core.canPopout": true },
     };
     ChatMessage.applyRollMode(chatData, game.settings.get("core", "rollMode"));
-    await game.dice3d.showForRoll(roll, game.user, true);
+    if (game.dice3d) {
+      await game.dice3d.showForRoll(roll, game.user, true);
+    }
     await ChatMessage.create(chatData);
   }
+
+  async shellRoll(challengeDice, target, benefit, rollType, shell, heldDice) {
+    const shellLabel = game.i18n.localize("NUTS.Shells." + shell);
+    let damage = 0;
+    let kickback = 0;
+    let rollAgain = false;
+    let surgeOptions = 0;
+    let hitPoints = 0;
+    let tempHitPoints = 0;
+    let newDice = parseInt(challengeDice) + 1 + parseInt(benefit);
+    let NewHeld = parseInt(heldDice) ? heldDice : 0;
+    if (shell === "defensive" && rollType == "cdDef") {
+      let level = this._calculateLevel("defensive");
+      if (level != "trained") {
+        if (challengeDice > 0) {
+          newDice = parseInt(challengeDice) + 2 + parseInt(benefit);
+        }
+      }
+    }
+    if (shell === "comboMaker" && rollType == "cdAttack") {
+      let level = this._calculateLevel("comboMaker");
+      if (level == "experienced") {
+        if (challengeDice > 0) {
+          newDice =
+            parseInt(challengeDice) + 2 + parseInt(benefit) + parseInt(NewHeld);
+        }
+      } else if (level == "mastered") {
+        newDice =
+          parseInt(challengeDice) + 2 + parseInt(benefit) + parseInt(NewHeld);
+      }
+    }
+    if (shell === "comboMaker" && rollType == "rollAgain") {
+      newDice = parseInt(challengeDice) + parseInt(benefit) + parseInt(NewHeld);
+    }
+    if (shell === "shifting") {
+      let level = this._calculateLevel("shift");
+      if (level == "experienced" || level == "mastered") {
+        newDice = parseInt(challengeDice) + 3 + parseInt(benefit);
+      }
+    }
+    if (shell === "unshift") {
+      this.update({ "system.shifting": false });
+      return;
+    }
+    let formula = newDice + "d12";
+    const roll = new Roll(formula, this);
+    await roll.evaluate();
+    let dices = roll.dice[0].results;
+    let values = roll.dice[0].values;
+    let root = values[0];
+    let twelves = [];
+    let cdTwelves = [];
+    let elevens = [];
+    let ones = [];
+    let success = [];
+    let cdSuccess = [];
+    let numCD = [];
+    let failures = [];
+    let cdFailures = [];
+    let surgeLevel = "trained";
+    let surgeLevelsecond = "trained";
+
+    if (success == 0) {
+      kickback = 1;
+    }
+
+    for (let i = 0; i < values.length; i++) {
+      if (i >= 1) {
+        numCD.push(values[i]);
+      }
+      if (values[i] >= parseInt(target)) {
+        if (i >= 1) {
+          cdSuccess.push(values[i]);
+        }
+        success.push(values[i]);
+      } else {
+        if (i >= 1) {
+          cdFailures.push(values[i]);
+        }
+        failures.push(values[i]);
+      }
+      if (values[i] == 12) {
+        if (i >= 1) {
+          cdTwelves.push(values[i]);
+        }
+        twelves.push(values[i]);
+      }
+      if (values[i] == 11) {
+        elevens.push(values[i]);
+      }
+      if (values[i] == 1) {
+        ones.push(values[i]);
+      }
+    }
+
+    if (shell === "hardHitting") {
+      let { newDamage, newKickback } = this._handleHardHitting(
+        twelves.length,
+        ones.length,
+        success.length,
+        rollType
+      );
+      damage = newDamage;
+      kickback = newKickback;
+    }
+    if (shell === "defensive") {
+      let { newDamage, newKickback } = this._handleDefensive(
+        twelves.length,
+        ones.length,
+        success.length,
+        rollType
+      );
+      damage = newDamage;
+      kickback = newKickback;
+    }
+    if (shell === "comboMaker") {
+      let { newDamage, newKickback, newRollAgain } = this._handleComboMaker(
+        twelves.length,
+        elevens.length,
+        ones.length,
+        success.length,
+        rollType
+      );
+      damage = newDamage;
+      kickback = newKickback;
+      rollAgain = newRollAgain;
+    }
+    if (shell === "surge") {
+      let { newDamage, newKickback, newSurgeOption } = this._handleSurge(
+        twelves.length,
+        elevens.length,
+        ones.length,
+        success.length,
+        rollType
+      );
+      kickback = newKickback;
+      if (rollType == "cdAttack") {
+        damage = newDamage;
+        surgeOptions = newSurgeOption;
+        surgeLevel =
+          this._calculateLevel("surge") == "experienced" ||
+          this._calculateLevel("surge") == "mastered"
+            ? true
+            : false;
+        surgeLevelsecond =
+          this._calculateLevel("surge") == "mastered" ? true : false;
+      }
+    }
+    if (shell === "companionSummon") {
+      let { newHitPoints } = this._handleCompanionSummon(
+        cdTwelves.length,
+        cdSuccess.length,
+        root,
+        parseInt(target),
+        cdFailures.length,
+        numCD.length
+      );
+      hitPoints = newHitPoints;
+      kickback = 0;
+      if (hitPoints > 0) {
+        this.update({ "system.companionSummon": true });
+      }
+    }
+    if (shell === "companionUse") {
+      let { newDamage, newKickback } = this._handleCompanionRoll(
+        twelves.length,
+        elevens.length,
+        ones.length,
+        success.length,
+        rollType
+      );
+      damage = newDamage;
+      kickback = newKickback;
+    }
+    if (shell == "companionDismiss") {
+      console.log("dave");
+      this.update({ "system.companionSummon": false });
+      return;
+    }
+    if (shell == "protection") {
+      let { newHitPoints } = this._handleProtection(
+        cdTwelves.length,
+        cdSuccess.length,
+        root,
+        parseInt(target),
+        cdFailures.length,
+        numCD.length,
+        ones.length
+      );
+      tempHitPoints = newHitPoints;
+      kickback = 0;
+    }
+    if (shell == "shifting") {
+      if (success > 0) {
+        this.update({ "system.shifting": true });
+      }
+    }
+    if (shell == "shift") {
+      let { newDamage, newKickback } = this._handleShift(
+        twelves.length,
+        ones.length,
+        success.length,
+        rollType
+      );
+      damage = newDamage;
+      kickback = newKickback;
+    }
+    const rollData = {
+      rollHTML: await roll.render(),
+      roll: roll._total,
+      formula: formula,
+      dices: dices,
+      numDice: values.length,
+      target: target,
+      damage: damage,
+      shell: shell,
+      shellLabel: shellLabel,
+      hitPoints: hitPoints,
+      kickback: kickback,
+      ones: ones.length,
+      twelves: twelves.length,
+      rollAgain: rollAgain,
+      actor: this._id,
+      rollType: rollType,
+      surgeOptions: surgeOptions,
+      surgeLevel: surgeLevel,
+      surgeLevelsecond: surgeLevelsecond,
+      surgeOptionOne:
+        this.system.surgeOptionsList[this.system.surgeOptionFirst],
+      surgeOptionTwo:
+        this.system.surgeOptionsList[this.system.surgeOptionSecond],
+      tempHitPoints: tempHitPoints,
+    };
+    let cardContent = await renderTemplate(
+      "systems/nuts/templates/chat/challengeRoll.hbs",
+      rollData
+    );
+    const chatData = {
+      user: game.user.id,
+      type: CONST.CHAT_MESSAGE_STYLES.OTHER,
+      content: cardContent,
+      speaker: ChatMessage.getSpeaker({ actor: this }),
+      flags: { "core.canPopout": true },
+    };
+    ChatMessage.applyRollMode(chatData, game.settings.get("core", "rollMode"));
+    if (game.dice3d) {
+      await game.dice3d.showForRoll(roll, game.user, true);
+    }
+
+    this.update({
+      "system.challengeDice.value": this.system.challengeDice.value + kickback,
+    });
+    await ChatMessage.create(chatData);
+  }
+
   async defensiveRoll(dice, level, gameType) {
     this.roll(dice);
   }
 
-  async hardhittingRoll(dice, level, gameType) {
+  async rollHardHittingAttack(dice, target, benefit, level, gameType) {
+    let newLevel = "trained";
+    let damage = 0;
+    if (gameType == "b") {
+      if (level == 2) {
+        newLevel = "experienced";
+      } else if (level > 2) {
+        newLevel = "mastered";
+      }
+    }
+    if (gameType == "c") {
+      if (level >= 3 && level < 6) {
+        newLevel = "experienced";
+      } else if (level >= 6) {
+        newLevel = "mastered";
+      }
+    }
+    if (newLevel == "experienced") {
+      damage = 2;
+    } else if (newLevel === "mastered") {
+      console.log(dice);
+    }
+    // this.roll(dice, target);
+  }
+
+  _calculateLevel(type) {
+    const level = this.system[type];
+    const gameType = game.settings.get("nuts", "gameType");
     let newLevel = "trained";
     if (gameType == "b") {
       if (level == 2) {
@@ -113,7 +423,174 @@ export class nutsActor extends Actor {
         newLevel = "mastered";
       }
     }
-    console.log("level ", newLevel);
-    this.roll(dice);
+    return newLevel;
+  }
+
+  _handleHardHitting(twelves, ones, success, rollType) {
+    let level = this._calculateLevel("hardHitting");
+    let newDamage = 0;
+    let newKickback = 0;
+    if (success == 0) {
+      newKickback = 1;
+    }
+    if (rollType == "cdAttack") {
+      if (level == "experienced") {
+        newDamage = 2;
+      }
+      if (level == "mastered") {
+        if (twelves > 0) {
+          newDamage = 3;
+        }
+      }
+    }
+    if (rollType == "cdDef") {
+      if (level == "experienced" || level == "mastered") {
+        if (twelves > 0) {
+          newDamage = 1;
+        }
+      }
+    }
+    return { newDamage, newKickback };
+  }
+
+  _handleDefensive(twelves, ones, success, rollType) {
+    let level = this._calculateLevel("defensive");
+    let newDamage = 0;
+    let newKickback = 0;
+    if (success == 0) {
+      newKickback = 1;
+    }
+    if (success > 0) {
+      newDamage = 1;
+    }
+    if (rollType == "cdAttack") {
+      if (level == "experienced" || level == "mastered") {
+        if (success > 0) {
+          newKickback = 2;
+        }
+      }
+    }
+    if (rollType == "cdDef") {
+      if (level == "mastered") {
+        newKickback = 1;
+      }
+    }
+    return { newDamage, newKickback };
+  }
+  _handleComboMaker(twelves, elevens, ones, success, rollType) {
+    let level = this._calculateLevel("comboMaker");
+    let newDamage = 0;
+    let newKickback = 0;
+    let newRollAgain = false;
+    if (success == 0) {
+      newKickback = 1;
+    }
+    if (success > 0) {
+      newDamage = 1;
+    }
+    if (twelves >= 1 && level == "experienced") {
+      newRollAgain = true;
+      newDamage = 2;
+    }
+    if (elevens + twelves >= 1 && level == "mastered") {
+      newRollAgain = true;
+      newDamage = 2;
+    }
+
+    return { newDamage, newKickback, newRollAgain };
+  }
+  _handleSurge(twelves, elevens, ones, success, rollType) {
+    let level = this._calculateLevel("surge");
+    let newDamage = 0;
+    let newKickback = 0;
+    let newSurgeOption = 0;
+    if (ones >= 1 || success == 0) {
+      newKickback = 1;
+    } else {
+      if (success > 0) {
+        newDamage = success;
+      }
+      if (twelves > 0) {
+        newSurgeOption = twelves;
+      }
+    }
+
+    return { newDamage, newKickback, newSurgeOption };
+  }
+
+  _handleCompanionSummon(twelves, success, root, target, failures, numCD) {
+    let level = this._calculateLevel("companion");
+    let newHitPoints = 0;
+    if (numCD > 0) {
+      if (success > 0) {
+        newHitPoints = success;
+      }
+      if (level == "mastered") {
+        newHitPoints = newHitPoints + twelves;
+      }
+      if (failures > 0) {
+        if (root > target) {
+          newHitPoints = newHitPoints + 1;
+        }
+      }
+    }
+    return { newHitPoints };
+  }
+
+  _handleCompanionRoll(twelves, elevens, ones, success, rollType) {
+    let newDamage = 0;
+    let newKickback = 0;
+    if (success == 0) {
+      newKickback = 1;
+    }
+    if (success > 0) {
+      newDamage = 1;
+    }
+    if (twelves > 0) {
+      newDamage = 2;
+    }
+
+    return { newDamage, newKickback };
+  }
+  _handleProtection(twelves, success, root, target, failures, numCD, ones) {
+    let level = this._calculateLevel("protection");
+    let newHitPoints = 0;
+    if (numCD > 0) {
+      if (success > 0) {
+        newHitPoints = success;
+      }
+      if (twelves > 0) {
+        newHitPoints = newHitPoints + twelves;
+      }
+      if (failures > 0) {
+        if (root > target) {
+          if (root >= 12) {
+            newHitPoints = newHitPoints + 2;
+          } else {
+            newHitPoints = newHitPoints + 1;
+          }
+        }
+      }
+      if (level == "trained") {
+        newHitPoints = newHitPoints - ones;
+      }
+    }
+
+    return { newHitPoints };
+  }
+  _handleShift(twelves, ones, success, rollType) {
+    let level = this._calculateLevel("shift");
+    let newDamage = 0;
+    let newKickback = 0;
+    if (success == 0) {
+      newKickback = 1;
+    }
+    if (success > 0) {
+      newDamage = 1;
+    }
+    if (twelves > 0) {
+      newDamage = 2;
+    }
+    return { newDamage, newKickback };
   }
 }
