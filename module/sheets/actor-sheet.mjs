@@ -46,6 +46,8 @@ export class nutsActorSheet extends ActorSheet {
     context.system = actorData.system;
     context.flags = actorData.flags;
 
+    context.takeABreather = game.settings.get("nuts", "takeABreather");
+
     // Adding a pointer to CONFIG.NUTS
     context.config = CONFIG.NUTS;
 
@@ -210,6 +212,10 @@ export class nutsActorSheet extends ActorSheet {
     html.on("click", ".rollBtn", this._onRoll.bind(this));
     html.on("click", ".shellSelect", this._setShellLevels.bind(this));
     html.on("click", ".surgeOptions", this._setSurgeOptions.bind(this));
+    
+    html.on("click", ".breatherBtn", (ev) => {
+      this._useBreather(this.actor)
+    })
 
     // Delete Inventory Item
     html.on("click", ".item-delete", (ev) => {
@@ -359,5 +365,11 @@ export class nutsActorSheet extends ActorSheet {
     const num = element.dataset.num;
     const location = "system.surgeOption" + num;
     this.actor.update({ [location]: value });
+  }
+
+  _useBreather() {
+    console.log("test breather");
+    const breatherDialog = new game.nuts.rollBreatherDialog(this.actor);
+    breatherDialog.render(true);
   }
 }

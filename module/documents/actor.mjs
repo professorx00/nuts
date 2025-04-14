@@ -78,6 +78,7 @@ export class nutsActor extends Actor {
     let twelves = [];
     let ones = [];
     let success = [];
+    let youGotBreather = false;
     for (let i = 0; i <= values.length; i++) {
       if (values[i] >= parseInt(target)) {
         success.push(values[i]);
@@ -90,7 +91,7 @@ export class nutsActor extends Actor {
       }
     }
 
-    if(success.length == 0){
+    if (success.length == 0) {
       kickback = 1;
     }
 
@@ -98,7 +99,13 @@ export class nutsActor extends Actor {
       if (rollType == "cdAttack") {
         damage = 1;
       }
+      if (twelves.length > 0 && ones.length <= 0) {
+        let breather = game.settings.get("nuts", "takeABreather");
+        game.settings.set("nuts", "takeABreather", breather + 1);
+        youGotBreather = true;
+      }
     }
+
     const rollData = {
       rollHTML: await roll.render(),
       roll: roll._total,
@@ -107,6 +114,7 @@ export class nutsActor extends Actor {
       target: target,
       damage: damage,
       kickback: kickback,
+      youGotBreather: youGotBreather,
     };
     let cardContent = await renderTemplate(
       "systems/nuts/templates/chat/challengeRoll.hbs",
@@ -137,6 +145,7 @@ export class nutsActor extends Actor {
     let surgeOptions = 0;
     let hitPoints = 0;
     let tempHitPoints = 0;
+    let youGotBreather = false;
     let newDice = parseInt(challengeDice) + 1 + parseInt(benefit);
     let NewHeld = parseInt(heldDice) ? heldDice : 0;
     if (shell === "defensive" && rollType == "cdDef") {
@@ -190,8 +199,6 @@ export class nutsActor extends Actor {
     let surgeLevel = "trained";
     let surgeLevelsecond = "trained";
 
-    
-
     for (let i = 0; i < values.length; i++) {
       if (i >= 1) {
         numCD.push(values[i]);
@@ -220,10 +227,17 @@ export class nutsActor extends Actor {
         ones.push(values[i]);
       }
     }
-
-    console.log("successes", success.length);
     if (success.length == 0) {
       kickback = 1;
+    }
+
+    if (success.length > 0) {
+      if (twelves.length > 0 && ones.length <= 0) {
+        let breather = game.settings.get("nuts", "takeABreather");
+        console.log("Take a Breather", breather);
+        game.settings.set("nuts", "takeABreather", breather + 1);
+        youGotBreather = true;
+      }
     }
 
     if (shell === "hardHitting") {
@@ -357,6 +371,7 @@ export class nutsActor extends Actor {
       rollType: rollType,
       surgeOptions: surgeOptions,
       surgeLevel: surgeLevel,
+      youGotBreather: youGotBreather,
       surgeLevelsecond: surgeLevelsecond,
       surgeOptionOne:
         this.system.surgeOptionsList[this.system.surgeOptionFirst],
@@ -384,6 +399,60 @@ export class nutsActor extends Actor {
       "system.challengeDice.value": this.system.challengeDice.value + kickback,
     });
     await ChatMessage.create(chatData);
+  }
+
+  async rollBreather(dice){
+    let formula = dice + "d12";
+    console.log("formula", formula)
+    const roll = new Roll(formula, this);
+    await roll.evaluate();
+    let dices = roll.dice[0].results;
+    let values = roll.dice[0].values;
+    let twelves = [];
+    let ones = [];
+    let success = [];
+    let CDs = 0;
+    for (let i = 0; i <= values.length; i++) {
+      if (values[i] > 1) {
+        success.push(values[i]);
+      }
+      if (values[i] == 12) {
+        twelves.push(values[i]);
+      }
+      if (values[i] == 1) {
+        ones.push(values[i]);
+      }
+    }
+    console.log(success.length, twelves.length)
+    if( ones.length == 0){
+      CDs = success.length +twelves.length
+    }
+
+
+     const rollData = {
+       rollHTML: await roll.render(),
+       roll: roll._total,
+       formula: formula,
+       cds: CDs,
+       dices: dices,
+     };
+     let cardContent = await renderTemplate(
+       "systems/nuts/templates/chat/breatherRoll.hbs",
+       rollData
+     );
+     const chatData = {
+       user: game.user.id,
+       type: CONST.CHAT_MESSAGE_TYPES.OTHER,
+       content: cardContent,
+       speaker: ChatMessage.getSpeaker({ actor: this }),
+       flags: { "core.canPopout": true },
+     };
+     ChatMessage.applyRollMode(chatData, game.settings.get("core", "rollMode"));
+     this.update({
+       "system.challengeDice.value": this.system.challengeDice.value + CDs,
+     });
+     await ChatMessage.create(chatData);
+     return roll;
   }
 
   async defensiveRoll(dice, level, gameType) {

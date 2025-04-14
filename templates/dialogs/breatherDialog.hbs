@@ -1,0 +1,17 @@
+<form class="">
+     <div class="">
+        <h1>Take A Breather</h1>
+        <h3>You choose this man challenge dice do you want to try to get back? {{challengeDice}}</h3>
+        <div class="flexrow">
+            {{#times challengeDice}}
+                <img class="breathDice" src="systems/nuts/assets/acorn_challenge.png" title="Challenge Dice" />
+            {{/times}}
+            {{#if (restDiceNumber challengeDice)}}
+                <img class="giveBreathDice" src="systems/nuts/assets/acorn_empty.png" title="Challenge Dice" />
+            {{/if}}
+        </div>
+        <div>
+            <a class="rollBreather">Roll Breather</a>
+        </div>
+    </div>
+</form>

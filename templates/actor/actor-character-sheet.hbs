@@ -2,7 +2,13 @@
 
   {{!-- Sheet Header --}}
   <header class="sheet-header">
-    <img class="profile-img nutProfile" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100"/>
+    <div class="profileHeader sheet-header">
+      <img class="profile-img nutProfile" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100"/>
+      <div>
+        <h3>Breathers: {{takeABreather}}</h3>
+        <a class="breatherBtn" data-roll-type="breather" data-title="Challenge Roll" data-challenge-dice="{{actor.challengeDice.value}}">Take A Breather</a>
+      </div>
+    </div>
     <div class="header-fields">
       <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
       {{!-- The grid classes are defined in scss/global/_grid.scss. To use,

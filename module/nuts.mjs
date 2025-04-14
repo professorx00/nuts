@@ -21,6 +21,7 @@ Hooks.once("init", function () {
     nutsActor,
     nutsItem,
     nutsRollDialog,
+    rollBreatherDialog,
     rollItemMacro,
   };
 
@@ -243,6 +244,14 @@ Handlebars.registerHelper("defRoll", function (type) {
     return false;
   }
 });
+
+Handlebars.registerHelper("restDiceNumber", function (dice) {
+  if (dice < 3) {
+    return true;
+  } else {
+    return false;
+  }
+});
 /* -------------------------------------------- */
 /*  Ready Hook                                  */
 /* -------------------------------------------- */
@@ -362,6 +371,52 @@ function rollItemMacro(itemUuid) {
     // Trigger the item roll
     item.roll();
   });
+}
+
+class rollBreatherDialog extends Application {
+  constructor(actor) {
+    super();
+    this.actor = actor;
+    this.dice = 0;
+    this.challengeDice = 0;
+  }
+  static get defaultOptions() {
+    return foundry.utils.mergeObject(super.defaultOptions, {
+      classes: ["form"],
+      height: 500,
+      width: 400,
+      popOut: true,
+      template: "systems/nuts/templates/dialogs/breatherDialog.hbs",
+      id: "breather-dialog",
+      title: "take A Breather",
+    });
+  }
+  getData() {
+    return {
+      actor: this.actor,
+      dice: this.dice,
+      challengeDice: this.challengeDice,
+    };
+  }
+  activateListeners(html) {
+    html.find(".giveBreathDice").click((ev) => this._addBreathDice(ev));
+    html.find(".breathDice").click((ev) => this._removeBreathDice(ev));
+    html.find(".rollBreather").click((ev) => this._rollBreather(ev));
+  }
+  _addBreathDice(ev) {
+    this.challengeDice = this.challengeDice + 1;
+    this.render();
+  }
+  _removeBreathDice(ev) {
+    this.challengeDice = this.challengeDice - 1;
+    this.render();
+  }
+  _rollBreather(ev) {
+    let roll = this.actor.rollBreather(this.challengeDice);
+    if (roll) {
+      this.close();
+    }
+  }
 }
 
 class nutsRollDialog extends Application {
@@ -508,6 +563,13 @@ function registerSystemSettings() {
         c: "Walnut",
       },
       initial: "b",
+    }),
+  });
+  game.settings.register("nuts", "takeABreather", {
+    name: "Take A Breather",
+    config: true,
+    type: new foundry.data.fields.NumberField({
+      initial: 1,
     }),
   });
 }

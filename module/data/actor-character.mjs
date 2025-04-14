@@ -23,6 +23,11 @@ export default class nutsCharacter extends nutsActorBase {
       6: new fields.NumberField({ ...requiredInteger, initial: 6 }),
     });
 
+    schema.takeABreather = new fields.NumberField({
+      ...requiredInteger,
+      initial: 1,
+    });
+
     schema.surgeOptionsList = new fields.SchemaField({
       a: new fields.StringField({
         initial: "Damage an adjacent enemy for 1 HP.",
